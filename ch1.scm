@@ -9,4 +9,8 @@
       ((atom? (car l)) (lat? (cdr l)))
       (else #f))))
 
-(+ 1 1)
+(define first
+  (lambda (l)
+    (cond
+     ((null? l) '())
+     (else (cons (car (car l)) (first (cdr l)))))))
