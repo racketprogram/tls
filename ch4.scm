@@ -108,4 +108,29 @@
     (cond
      ((and (number? n) (number? m)) (o= n m))
      ((or (number? n) (number? m)) #f)
-     (else (eq? n m))))) 
+     (else (eq? n m)))))
+
+(define occur
+  (lambda (a lat)
+    (cond
+     ((null? lat) 0)
+     ((epan? a (car lat)) (add1 (occur a (cdr lat))))
+     (else (occur a (cdr lat))))))
+
+
+(define one?
+  (lambda (n)
+    (cond
+     ((zero? n) #f)
+     (else (zero? (sub1 n))))))
+
+(define one??
+  (lambda (n) (= n 1)))
+
+
+(define rempick1
+  (lambda (n lat)
+    (cond
+     ((null? lat) '())
+     ((one?? n) (cdr lat))
+     (else (cons (car lat) (rempick (sub1 n) (cdr lat)))))))
