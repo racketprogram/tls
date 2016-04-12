@@ -28,7 +28,7 @@
      ((eq? o1 (car lat)) (cons n (cdr lat)))
      ((eq? o2 (car lat)) (cons n (cdr lat)))
      (else (cons (car lat) (subset n o1 o2 (cdr lat)))))))
-(defne multirember
+(define multirember
   (lambda (x lat)
     (cond
      ((null? lat) '())
