@@ -71,3 +71,62 @@
                        (eq? (car l) a)
                        (member* a (cdr l))))
      (else (or (member* a (car l)) (member* a (cdr l)))))))
+
+(define leftmostMY
+  (lambda (l)
+    (cond
+     ((null? l) 'noA)
+     ((atom? (car l)) (car l))
+     (else (leftmostMY (car l))))))
+
+(define leftmost
+  (lambda (l)
+    (cond
+     ((atom? (car l)) (car l))
+     (else (leftmost (car l))))))
+
+(define epan?
+  (lambda (n m)
+    (cond
+     ((and (number? n) (number? m)) (o= n m))
+     ((or (number? n) (number? m)) #f)
+     (else (eq? n m)))))
+
+(define eqlist?*
+  (lambda (l1 l2)
+    (cond
+     ((and (null? l1) (null? l2)) #t)
+     ((or (null? l1) (null? l2)) #f)
+     ((and (atom? (car l1)) (atom? (car l2)))
+      (and (epan? (car l1) (car l2)) (eqlist?* (cdr l1) (cdr l2))))
+     ((or (atom? (car l1)) (atom? (car l2))) #f)
+     (else (and (eqlist?* (car l1) (car l2)) (eqlist?* (cdr l1) (cdr l2)))))))
+
+(define equal?
+  (lambda (s1 s2)
+    (cond
+     ((and (atom? s1) (atom? s2))
+      (epan? s1 s2))
+     ((or (atom? s1) (atom? s2)) #f)
+     (else (eqlist? s1 s2)))))
+
+(define eqlist?
+  (lambda (l1 l2)
+    (cond
+     ((and (null? l1) (null? l2)) #t)
+     ((or (null? l1) (null? l2)) #f)
+     (else (and (equal? (car l1) (car l2)) (eqlist? (cdr l1) (cdr l2)))))))
+
+(define rember
+  (lambda (s l)
+    (cond
+     ((null? l) '())
+     ((equal? s (car l)) (cdr l))
+     ((cons (car l) (rember s (cdr l)))))))
+
+(define rember*
+  (lambda (s l)
+    (cond
+     ((null? l) '())
+     ((equal? s (car l)) (cdr l))
+     (else (cons (cdr l) (rember* s (cdr l)))))))
