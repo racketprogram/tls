@@ -45,3 +45,29 @@
                        ((eq? (car l) o) (cons n (subset* n o (cdr l))))
                        (else (cons (car l) (subset* n o (cdr l))))))
      (else (cons (subset* n o (car l)) (subset* n o (cdr l)))))))
+(define insertL*
+  (lambda (n o l)
+    (cond
+     ((null? l) '())
+     ((atom? (car l)) (cond
+                       ((eq? (car l) o) (cons n (cons o (insertL* n o (cdr l)))))
+                       (else (cons (car l) (insertL* n o(cdr l))))))
+     (else (cons (insertL* n o (car l)) (insertL* n o (cdr l)))))))
+
+(define member**
+  (lambda (a l)
+    (cond
+     ((null? l) #f)
+     ((atom? (car l)) (cond
+                       ((eq? (car l) a) #t)
+                       (else (member** a (cdr l)))))
+     (else (or (member** a (car l)) (member** a (cdr l)))))))
+
+(define member*
+  (lambda (a l)
+    (cond
+     ((null? l) #f)
+     ((atom? (car l)) (or
+                       (eq? (car l) a)
+                       (member* a (cdr l))))
+     (else (or (member* a (car l)) (member* a (cdr l)))))))
