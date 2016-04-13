@@ -124,9 +124,9 @@
      ((equal? s (car l)) (cdr l))
      ((cons (car l) (rember s (cdr l)))))))
 
-(define rember*
+(define rember*simp
   (lambda (s l)
     (cond
      ((null? l) '())
      ((equal? s (car l)) (cdr l))
-     (else (cons (cdr l) (rember* s (cdr l)))))))
+     (else (cons (car l) (rember*simp s (cdr l)))))))
