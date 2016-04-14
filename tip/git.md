@@ -7,3 +7,4 @@
     cat ~/.ssh/id_rsa.pub
     git remote add origin https://github.com/racketprogram/tls.git
     git push -u origin master
+    git

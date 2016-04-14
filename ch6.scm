@@ -1,7 +1,3 @@
-(define atom?
-  (lambda (x)
-    (and (not (pair? x)) (not (null? x)))))
-
 (define numbered?
   (lambda (aexp)
     (cond
@@ -35,4 +31,7 @@
           (value (car (cdr (cdr nexp))))))
      ((eq? (car (cdr nexp)) 'o/)
       (o/ (value (car nexp))
+          (value (car (cdr (cdr nexp))))))
+     ((eq? (car (cdr nexp)) 'o^)
+      (o^ (value (car nexp))
           (value (car (cdr (cdr nexp)))))))))
