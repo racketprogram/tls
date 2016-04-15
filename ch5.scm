@@ -122,7 +122,7 @@
     (cond
      ((null? l) '())
      ((equal? s (car l)) (cdr l))
-     ((cons (car l) (rember s (cdr l)))))))
+     (else (cons (car l) (rember s (cdr l)))))))
 
 (define rember*simp
   (lambda (s l)
