@@ -24,11 +24,17 @@
      (else (cons (car lat)
                  (rember a (cdr lat)))))))
 
-(define first
+(define firsts
   (lambda (l)
     (cond
      ((null? l) '())
-     (else (cons (car (car l)) (first (cdr l)))))))
+     (else (cons (car (car l)) (firsts (cdr l)))))))
+
+(define seconds
+  (lambda (l)
+    (cond
+     ((null? l) '())
+     (else (cons (car (cdr (car l))) (seconds (cdr l)))))))
 
 (define insertR
   (lambda (new old lat)
@@ -44,13 +50,13 @@
      ((eq? old (car lat)) (cons new (cons old (insert new old (cdr lat)))))
      (else (cons (car lat) (insertL new old (cdr lat)))))))
 
-(define subset
+(define subst2
    (lambda (n o1 o2 lat)
     (cond
      ((null? lat) '())
      ((eq? o1 (car lat)) (cons n (cdr lat)))
      ((eq? o2 (car lat)) (cons n (cdr lat)))
-     (else (cons (car lat) (subset n o1 o2 (cdr lat)))))))
+     (else (cons (car lat) (subst2 n o1 o2 (cdr lat)))))))
 
 (define multirember
   (lambda (x lat)
