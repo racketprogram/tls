@@ -28,3 +28,26 @@
        ((test? o (car l))
         (cons n (cons o ((insertL-f test?) n o (cdr l)))))
        (else (cons (car l) ((insertL-f test?) n o (cdr l))))))))
+
+(define insertR-f
+  (lambda (test?)
+    (lambda (n o l)
+      (cond
+	((null? l) '())
+	((test? o (car l))
+	 (cons o (cons n ((insertR-f test?) n o (cdr l)))))
+	(else (cons (car l) ((insertR-f test?) n o (cdr l))))))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
