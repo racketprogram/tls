@@ -33,12 +33,27 @@
   (lambda (test?)
     (lambda (n o l)
       (cond
-	((null? l) '())
-	((test? o (car l))
-	 (cons o (cons n ((insertR-f test?) n o (cdr l)))))
-	(else (cons (car l) ((insertR-f test?) n o (cdr l))))))))
+       ((null? l) '())
+       ((test? o (car l))
+        (cons o (cons n ((insertR-f test?) n o (cdr l)))))
+       (else (cons (car l) ((insertR-f test?) n o (cdr l))))))))
 
+(define insert-g
+  (lambda (seq)
+    (lambda (n o l)
+      (cond
+       ((null? l) '())
+       ((eq? o (car l))
+        (seq n o ((insert-g seq) n o (cdr l))))
+       (else (cons (car l) ((insert-g seq) n o (cdr l))))))))
 
+(define seqR
+  (lambda (n o l)
+    (cons o (cons n l))))
+
+(define seqL
+  (lambda (n o l)
+    (cons n (cons o l))))
 
 
 
