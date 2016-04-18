@@ -38,15 +38,6 @@
         (cons o (cons n ((insertR-f test?) n o (cdr l)))))
        (else (cons (car l) ((insertR-f test?) n o (cdr l))))))))
 
-(define insert-g
-  (lambda (seq)
-    (lambda (n o l)
-      (cond
-       ((null? l) '())
-       ((eq? o (car l))
-        (seq n o ((insert-g seq) n o (cdr l))))
-       (else (cons (car l) ((insert-g seq) n o (cdr l))))))))
-
 (define seqR
   (lambda (n o l)
     (cons o (cons n l))))
@@ -55,14 +46,52 @@
   (lambda (n o l)
     (cons n (cons o l))))
 
+(define insertR (insert-g seqR))
 
+(define insertL
+  (insert-g
+   (lambda (n o l)
+     (cons n (cons o l)))))
 
+(define subst
+  (lambda (n o l)
+    (cond
+     ((null? l) '())
+     ((eq? (car l) o)
+      (cons n (cdr l)))
+     (else (cons (car l)
+                 (subst n o (cdr l)))))))
 
+(define seqS
+  (lambda (n o l)
+    (cons n l)))
 
+(define subst (insert-g seqS))
 
+(define rember
+  (lambda (a l)
+    ((insert-g (lambda (n o l) l)) #f a l)))
 
+(define insert-g
+  (lambda (seq)
+    (lambda (n o l)
+      (cond
+       ((null? l) '())
+       ((eq? o (car l))
+        (seq n o (cdr l)))
+       (else (cons (car l) ((insert-g seq) n o (cdr l))))))))
 
+(define atom-to-function
+  (lambda (x)
+    (cond
+     ((eq? x 'o+) o+)
+     ((eq? x 'o-) o-)
+     (else o^))))
 
-
-
-
+(define value
+  (lambda (nexp)
+    (cond
+     ((atom? nexp) nexp)
+     (else ((atom-to-function (operator nexp))
+            (value (1st-sub-exp nexp))
+            (value (2nd-sub-exp nexp)))))))
