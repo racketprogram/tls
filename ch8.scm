@@ -95,3 +95,49 @@
      (else ((atom-to-function (operator nexp))
             (value (1st-sub-exp nexp))
             (value (2nd-sub-exp nexp)))))))
+
+(define multirember-f
+  (lambda (test?)
+    (lambda (a lat)
+      (cond
+       ((null? lat) '())
+       ((test? a (car lat))
+        ((multirember-f test?) a (cdr lat)))
+       (else (cons (car lat)
+                   ((multirember-f test?) a (cdr lat))))))))
+
+(define multirember-eq?
+  (multirember-f eq?))
+
+(define eq?-tuna
+  (eq?-c 'tuna))
+
+(define multiremberT
+  (lambda (test? lat)
+    (cond
+     ((null? lat) '())
+     ((test? (car lat))
+      (multiremberT test? (cdr lat)))
+     (else (cons (car lat)
+                 (multiremberT test? (cdr lat)))))))
+
+(define multirember&co
+  (lambda (a lat col)
+    (cond
+     ((null? lat) (col '() '()))
+     ((eq? (car lat) a)
+      (multirember&co a
+                      (cdr lat)
+                      (lambda (newlat seen)
+                        (col newlat
+                             (cons (car lat) seen)))))
+     (else
+      (multirember&co a
+                      (cdr lat)
+                      (lambda (newlat seen)
+                        (col (cons (car lat) newlat)
+                             seen)))))))
+
+(define a-friend
+  (lambda (x y)
+    x))
