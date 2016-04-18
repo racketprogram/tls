@@ -141,3 +141,17 @@
 (define a-friend
   (lambda (x y)
     x))
+
+(define occur-cps
+  (lambda (a l cp)
+    (cond
+     ((null? l) (cp 0 0))
+     ((eq? a (car l))
+      (occur-cps a
+                 (cdr l)
+                 (lambda (n o)
+                   (cp (add1 n) o))))
+     (else (occur-cps a
+                      (cdr l)
+                      (lambda (n o)
+                        (cp n (add1 o))))))))
