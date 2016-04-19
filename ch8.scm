@@ -155,3 +155,121 @@
                       (cdr l)
                       (lambda (n o)
                         (cp n (add1 o))))))))
+
+(define mapcar
+  (lambda (cp l)
+    (cond
+     ((null? l) (cp '()))
+     ((atom? (car l))
+      (mapcar (lambda (n)
+                (cp (cons (car l) n)))
+              (cdr l)))
+     (else (mapcar (lambda (n)
+                     (cp n))
+                   (cdr l))))))
+
+(define multiremberLR&co
+  (lambda (new oL oR lat col)
+    (cond
+     ((null? lat)
+      (col '() 0 0))
+     ((eq? oL (car lat))
+      (multiremberLR&co new oL oR (cdr lat)
+                        (lambda (l n m)
+                          (col (cons new (cons (car lat) l))
+                               (add1 n)
+                               m))))
+     ((eq? oR (car lat))
+      (multiremberLR&co new oL oR (cdr lat)
+                        (lambda (l n m)
+                          (col (cons (car lat) (cons new l))
+                               n
+                               (add1 m)))))
+     (else (multiremberLR&co new oL oR (cdr lat)
+                             (lambda (l n m)
+                               (col (cons (car lat) l)
+                                    n
+                                    m)))))))
+
+(define even?
+  (lambda (n)
+    (epan? (o* (o/ n 2) 2) n)))
+
+(define evens-only*
+  (lambda (l)
+    (cond
+     ((null? l) '())
+     ((atom? (car l))
+      (cond
+       ((even? (car l))
+        (cons (car l) (evens-only* (cdr l))))
+       (else (evens-only* (cdr l)))))
+     (else (cons (evens-only* (car l))
+                 (evens-only* (cdr l)))))))
+
+(define evens-only*&co
+  (lambda (l col)
+    (cond
+     ((null? l) (col '() 0 0))
+     ((atom? (car l))
+      (cond
+       ((even? (car l))
+        (evens-only*&co (cdr l)
+                        (lambda (newlat e o)
+                          (col (cons (car l) newlat)
+                               (add1 e)
+                               o))))
+       (else (evens-only*&co (cdr l)
+                             (lambda (newlat e o)
+                               (col newlat
+                                    e
+                                    (add1 o)))))))
+     (else (evens-only*&co (car l)
+                           (lambda (al ae ao)
+                             (evens-only*&co (cdr l)
+                                             (lambda (dl de do)
+                                               (col (cons al dl)
+                                                    (+ ae de)
+                                                    (+ ao do))))))))))
+
+(define occur*&co
+  (lambda (a l col)
+    (cond
+     ((null? l) (col 0))
+     ((atom? (car l))
+      (cond
+       ((eq? a (car l))
+        (occur*&co a
+                   (cdr l)
+                   (lambda (num)
+                     (col (add1 num)))))
+       (else (occur*&co a
+                        (cdr l)
+                        (lambda (num)
+                          (col num))))))
+     (else (occur*&co a
+                      (cdr l)
+                      (lambda (num1)
+                        (occur*&co a
+                                   (car l)
+                                   (lambda (num2)
+                                     (col (o+ num1 num2))))))))))
+
+(define fib
+  (lambda (x)
+    (cond
+     ((eq? x 0) 1)
+     ((eq? x 1) 1)
+     (else (+ (fib (- x 2))
+              (fib (- x 1)))))))
+
+(define fib&co
+  (lambda (x col)
+    (cond
+     ((eq? x 0) (col 1))
+     ((eq? x 1) (col 1))
+     (else (fib&co (- x 1)
+                   (lambda (num1)
+                     (fib&co (- x 2)
+                             (lambda (num2)
+                               (col (+ num1 num2))))))))))
