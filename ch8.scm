@@ -273,3 +273,18 @@
                      (fib&co (- x 2)
                              (lambda (num2)
                                (col (+ num1 num2))))))))))
+
+(define flat
+  (lambda (lat col)
+    (cond
+     ((null? lat) (col '()))
+     ((atom? (car lat))
+      ((flat (cdr lat)
+             (lambda (nl)
+               (col (cons (car lat)
+                          nl))))))
+     (else (flat (car lat)
+                 (lambda (dl)
+                   (flat (cdr lat)
+                         (lambda (al)
+                           (col (cons dl al))))))))))

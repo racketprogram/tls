@@ -299,7 +299,6 @@ values."
               (define-key scheme-mode-map (kbd "<f5>") 'scheme-send-last-sexp-split-window)
               (define-key scheme-mode-map (kbd "<f6>") 'scheme-send-definition-split-window)))
 
-
   ;;;;;;;;;;;;
   ;; lambda
   ;;;;;;;;;;;;
@@ -313,8 +312,6 @@ values."
   
   (add-hook 'scheme-mode-hook 'my-pretty-lambda)
   (global-prettify-symbols-mode 1)
-
-
 
   ;;;;;;;;;;;;
   ;; key [ (
