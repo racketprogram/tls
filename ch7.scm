@@ -117,6 +117,10 @@
   (lambda (p)
     (car (cdr p))))
 
+(define third
+  (lambda (l)
+    (car (cdr (cdr l)))))
+
 (define build
   (lambda (s1 s2)
     (cons s1 (cons s2 '()))))

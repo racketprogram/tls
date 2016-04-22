@@ -47,7 +47,7 @@
   (lambda (new old lat)
     (cond
      ((null? lat) '())
-     ((eq? old (car lat)) (cons new (cons old (insert new old (cdr lat)))))
+     ((eq? old (car lat)) (cons new (cons old (insertL new old (cdr lat)))))
      (else (cons (car lat) (insertL new old (cdr lat)))))))
 
 (define subst2
