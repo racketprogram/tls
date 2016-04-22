@@ -6,6 +6,18 @@
   (lambda (s1 s2)
     (cons s1 (cons s2 '()))))
 
+(define first
+  (lambda (p)
+    (car p)))
+
+(define second
+  (lambda (p)
+    (car (cdr p))))
+
+(define third
+  (lambda (l)
+    (car (cdr (cdr l)))))
+
 (define new-entry build)
 
 (define lookup-in-entry
@@ -112,17 +124,6 @@
 (define table-of first)
 (define formals-of second)
 (define body-of third)
-
-(define first
-  (lambda (p)
-    (car p)))
-
-(define second
-  (lambda (p)
-    (car (cdr p))))
-(define third
-  (lambda (l)
-    (car (cdr (cdr l)))))
 
 (define evcon
   (lambda (lines table)
