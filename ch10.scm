@@ -1,5 +1,6 @@
+;;;;;;;;;Arithmatic;;;;;;;;
 (load "./ch10-1.scm")
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define atom?
   (lambda (x)
     (and (not (pair? x)) (not (null? x)))))
@@ -260,3 +261,4 @@
 
 ;;;;;;;;;REPL;;;;;;;;;;
 (load "./ch10-repl")
+;;;;;;;;;;;;;;;;;;;;;;;
