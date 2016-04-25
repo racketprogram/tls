@@ -1,3 +1,5 @@
+(load "./ch10-1.scm")
+
 (define atom?
   (lambda (x)
     (and (not (pair? x)) (not (null? x)))))
@@ -56,7 +58,6 @@
      ((atom? e) (atom-to-action e))
      (else (list-to-action e)))))
 
-
 (define atom-to-action
   (lambda (e)
     (cond
@@ -73,6 +74,14 @@
      ((eq? e (quote add1))    *const)
      ((eq? e (quote sub1))    *const)
      ((eq? e (quote number?)) *const)
+     ((eq? e (quote o+))      *const)
+     ((eq? e (quote o-))      *const)
+     ((eq? e (quote o*))      *const)
+     ((eq? e (quote o/))      *const)
+     ((eq? e (quote o^))      *const)
+     ((eq? e (quote o=))      *const)
+     ((eq? e (quote o>))      *const)
+     ((eq? e (quote o<))      *const)
      (else *identifier))))
 
 (define list-to-action
@@ -210,8 +219,22 @@
       (sub1 (first vals)))
      ((eq? name (quote number?))
       (number? (first vals)))
-     ((eq? name (quote +))
-      (+ (first vals) (second vals))))))
+     ((eq? name (quote o+))
+      (o+ (first vals) (second vals)))
+     ((eq? name (quote o-))
+      (o+ (first vals) (second vals)))
+     ((eq? name (quote o*))
+      (o* (first vals) (second vals)))
+     ((eq? name (quote o/))
+      (o/ (first vals) (second vals)))
+     ((eq? name (quote o^))
+      (o^ (first vals) (second vals)))
+     ((eq? name (quote o=))
+      (o= (first vals) (second vals)))
+     ((eq? name (quote o>))
+      (o> (first vals) (second vals)))
+     ((eq? name (quote o<))
+      (o< (first vals) (second vals))))))
 
 (define :atom?
   (lambda (x)
@@ -235,17 +258,5 @@
               (table-of closure)))))
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define (repl evaluator)
-  (display "repl>")
-  (let ((expr (read)))
-    (cond ((eq? expr 'exit)
-           (display "Exiting read-eval-print loop")
-           (newline))
-          (else
-           (write (evaluator expr))
-           (newline)
-           (repl evaluator)))))
-
-(repl value)
+;;;;;;;;;REPL;;;;;;;;;;
+(load "./ch10-repl")
