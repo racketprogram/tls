@@ -81,3 +81,43 @@
                  ((eq? a (car lat)) #t)
                  (else (mr? (cdr lat)))))))
       (mr? lat))))
+
+(define union
+  (lambda (set1 set2)
+    (letrec ((U (lambda (set1)
+                  (cond
+                   ((null? set1) set2)
+                   ((MR? (car set1) set2)
+                    (U (cdr set1)))
+                   (else (cons (car set1) (U (cdr set1)))))))
+             (MR? (lambda (a lat)
+                    (letrec ((M (lambda (lat)
+                                  (cond ((null? lat) #f)
+                                        ((eq? a (car lat)) #t)
+                                        (else (M (cdr lat)))))))
+                      (M lat)))))
+      (U set1))))
+
+(define two-in-a-row-protect
+  (letrec
+      ((W (lambda (a lat)
+            (cond
+             ((null? lat) #f)
+             ((eq? a (car lat)) #t)
+             (else (W (car lat) (cdr lat)))))))
+    (lambda (lat)
+      (cond
+       ((null? lat) #f)
+       (else (W (car lat) (cdr lat)))))))
+
+(define sum-of-prefixes-protect
+  (lambda (tup)
+    (letrec ((S (lambda (sum tup)
+                  (cond
+                   ((null? tup) '())
+                   (else (cons (+ sum (car tup))
+                               (S (+ sum (car tup))
+                                  (cdr tup))))))))
+      (S 0 tup))))
+
+
