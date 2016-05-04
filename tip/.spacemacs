@@ -26,8 +26,8 @@ values."
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
-     common-lisp
-     ;; scheme  
+     ;; common-lisp
+     ;; scheme
      ;; git
      ;; markdown
      ;; org
@@ -67,7 +67,7 @@ values."
    ;; (default t)
    dotspacemacs-elpa-https t
    ;; Maximum allowed time in seconds to contact an ELPA repository.
-   dotspacemacs-elpa-timeout 5
+   dotspacemacs-elpa-timeout t
    ;; If non nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. (default t)
    dotspacemacs-check-for-update t
@@ -84,11 +84,11 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists nil
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 5
@@ -98,19 +98,19 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(zenburn
-                         spacemacs-dark
-                         spacemacs-light
-                         solarized-light
-                         solarized-dark
-                         leuven
-                         monokai
-                         zenburn)
+                         ;spacemacs-dark
+                         ;spacemacs-light
+                         ;solarized-light
+                         ;solarized-dark
+                         ;leuven
+                         ;monokai
+                         )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 12
+   dotspacemacs-default-font '("Droid Sans Mono"
+                               :size 17
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -181,17 +181,17 @@ values."
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
    dotspacemacs-fullscreen-use-non-native nil
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -205,11 +205,11 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
    ;; derivatives. If set to `relative', also turns on relative line numbers.
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
@@ -242,7 +242,7 @@ values."
   ;; paredit-mode
   ;;;;;;;;;;;;;;;;
 
-  (autoload 'paredit-mode "~/.emacs.d/paredit"
+  (autoload 'paredit-mode "~/.emacs.d/paredit.el"
     "Minor mode for pseudo-sructurally editing Lisp code."
     t)
 
@@ -251,7 +251,7 @@ values."
   ;;;;;;;;;;;;
 
   (require 'cmuscheme)
-  (setq scheme-program-name "csi")         ;; 如果用 Petite 就改成 "petite"
+  (setq scheme-program-name "scheme")   ;; choose "mit-scheme" or "csi" or ...
 
 
   ;; bypass the interactive question and start the default interpreter
@@ -270,7 +270,7 @@ values."
     (cond
      ((= 1 (count-windows))
       (delete-other-windows)
-      (split-window-vertically (floor (* 0.68 (window-height))))
+      (split-window-vertically (floor (* 0.73 (window-height))))
       (other-window 1)
       (switch-to-buffer "*scheme*")
       (other-window 1))
@@ -299,6 +299,28 @@ values."
               (paredit-mode 1)
               (define-key scheme-mode-map (kbd "<f5>") 'scheme-send-last-sexp-split-window)
               (define-key scheme-mode-map (kbd "<f6>") 'scheme-send-definition-split-window)))
+
+  ;;;;;;;;;;;;
+  ;; lambda
+  ;;;;;;;;;;;;
+
+  (defun my-pretty-lambda ()
+  "make some word or string show as pretty Unicode symbols"
+  (setq prettify-symbols-alist
+        '(
+          ("lambda" . 955) ; λ
+          )))
+  
+  (add-hook 'scheme-mode-hook 'my-pretty-lambda)
+  (global-prettify-symbols-mode 1)
+
+  ;;;;;;;;;;;;
+  ;; key [ (
+  ;;;;;;;;;;;;
+
+  ;;(global-set-key"[""(")
+  ;;(global-set-key"]"")") 
+
   )
 
 (defun dotspacemacs/user-config ()
