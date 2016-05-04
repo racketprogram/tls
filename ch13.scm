@@ -93,8 +93,71 @@
                   ((null? (car lset))
                    (hop '()))
                   ((null? (cdr lset)) (car lset))
-                  (else (intersect (car lset)
+                  (else (intersect-letcc-a (car lset)
                                    (I (cdr lset))))))))
          (cond
           ((null? lset) '())
           (else (I lset))))))))
+
+(define intersect-letcc-a
+  (lambda (set1 set2)
+    (letrec
+        ((I (lambda (set1)
+              (cond
+               ((null? set1) '())
+               ((member? (car set1) set2)
+                (cons (car set1)
+                      (I (cdr set1))))
+               (else (I (cdr set1)))))))
+      (cond
+       ((null? set2) '())
+       (else (I set1))))))
+
+(define intersectall-y
+  (lambda (lset)
+    (call/cc
+     (lambda (hop)
+       (letrec
+           ((intersectall-letrec (lambda (lset)
+                                   (cond
+                                    ((null? (car lset)) (hop '()))
+                                    ((null? (cdr lset)) (car lset))
+                                    (else (intersect (car lset)
+                                                     (intersectall-letrec (cdr lset)))))))
+            (intersect (lambda (s1 s2)
+                         (letrec
+                             ((intersect-letrec (lambda (s1)
+                                    (cond
+                                     ((null? s1) '())
+                                     ((member? (car s1) s2)
+                                      (cons (car s1)
+                                            (intersect-letrec (cdr s1))))
+                                     (else (intersect-letrec (cdr s1))))))
+                              (member? (lambda (a lat)
+                                         (letrec
+                                             ((member?-letrec (lambda (lat)
+                                                                (cond
+                                                                 ((null? lat) #f)
+                                                                 ((eq? a (car lat)) #t)
+                                                                 (else (member?-letrec (cdr lat)))))))
+                                           (member?-letrec lat)))))
+                           (cond
+                            ((null? s2) (hop '()))
+                            (else (intersect-letrec s1)))))))
+         (cond
+          ((null? lset) '())
+          (else (intersectall-letrec lset))))))))
+
+(define rember-upto-last-call/cc
+  (lambda (a lat)
+    (call/cc
+     (lambda (skip)
+       (letrec
+           ((RUL (lambda (lat)
+                   (cond
+                    ((null? lat) '())
+                    ((eq? a (car lat))
+                     (skip (RUL (cdr lat))))
+                    (else (cons (car lat)
+                                (RUL (cdr lat))))))))
+         (RUL lat))))))
