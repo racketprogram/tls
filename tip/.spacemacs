@@ -27,7 +27,7 @@ values."
      ;; better-defaults
      emacs-lisp
      ;; common-lisp
-     ;; scheme
+     ;; scheme  
      ;; git
      ;; markdown
      ;; org
@@ -67,7 +67,7 @@ values."
    ;; (default t)
    dotspacemacs-elpa-https t
    ;; Maximum allowed time in seconds to contact an ELPA repository.
-   dotspacemacs-elpa-timeout t
+   dotspacemacs-elpa-timeout 5
    ;; If non nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. (default t)
    dotspacemacs-check-for-update t
@@ -84,11 +84,11 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner nil
+   dotspacemacs-startup-banner 'official
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists nil
+   dotspacemacs-startup-lists '(recents projects)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 5
@@ -98,13 +98,12 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(zenburn
-                         ;spacemacs-dark
-                         ;spacemacs-light
-                         ;solarized-light
-                         ;solarized-dark
-                         ;leuven
-                         ;monokai
-                         )
+                         spacemacs-dark
+                         spacemacs-light
+                         solarized-light
+                         solarized-dark
+                         leuven
+                         monokai)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -181,7 +180,7 @@ values."
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar nil
+   dotspacemacs-loading-progress-bar t
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
    dotspacemacs-fullscreen-at-startup t
@@ -242,7 +241,7 @@ values."
   ;; paredit-mode
   ;;;;;;;;;;;;;;;;
 
-  (autoload 'paredit-mode "~/.emacs.d/paredit.el"
+  (autoload 'paredit-mode "~/.paredit.el"
     "Minor mode for pseudo-sructurally editing Lisp code."
     t)
 

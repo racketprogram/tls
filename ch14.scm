@@ -114,10 +114,10 @@
     (cond
      ((null? l) 1)
      ((atom? (car l))
-      (depth* (cdr l)))
+      (depth*-let (cdr l)))
      (else
-      (let ((d (depth* (cdr l)))
-            (a (add1 (depth* (car l)))))
+      (let ((d (depth*-let (cdr l)))
+            (a (add1 (depth*-let (car l)))))
         (cond
          ((> d a) d)
          (else a)))))))
