@@ -118,6 +118,98 @@
      (else
       (let ((d (depth*-let (cdr l)))
             (a (add1 (depth*-let (car l)))))
+        (if (> d a) d a))))))
+
+(define depth*-let2
+  (lambda (l)
+    (cond
+     ((null? l) 1)
+     (else
+      (let ((d (depth*-let2 (cdr l))))
         (cond
-         ((> d a) d)
-         (else a)))))))
+         ((atom? (car l)) d)
+         (else
+          (let ((a (add1 (depth*-let2 (car l)))))
+            (cond
+             ((> d a) d)
+             (else a))))))))))
+
+(define leftmost-let-call/cc
+  (lambda (l)
+    (call/cc
+     (lambda (cc)
+       (letrec ((lm (lambda (l)
+                      (cond
+                       ((null? l) '())
+                       ((atom? (car l)) (cc (car l)))
+                       (else (let ()
+                               (lm (car l))
+                               (lm (cdr l))))))))
+         (lm l))))))
+
+(define rm
+  (lambda (a l oh)
+    (cond
+     ((null? l) (oh 'no))
+     ((atom? (car l))
+      (if (eq? (car l) a)
+          (cdr l)
+          (cons (car l)
+                (rm a (cdr l) oh))))
+     (else
+      (if (atom?
+           (call/cc
+            (lambda (oh)
+              (rm a (car l) oh))))
+          (cons (car l)
+                (rm a (cdr l) oh))
+          (cons (rm a (car l) 0)
+                (cdr l)))))))
+
+(define rm-let
+  (lambda (a l cc)
+    (cond
+     ((null? l) (cc 'no))
+     ((atom? (car l))
+      (if (eq? (car l) a)
+          (cdr l)
+          (cons (car l)
+                (rm-let a (cdr l) cc))))
+     (else
+      (let ((new-l (call/cc (lambda (cc) (rm-let a (car l) cc)))))
+        (if (atom? new-l)
+            (cons (car l)
+                  (rm-let a (cdr l) cc))
+            (cons new-l (cdr l))))))))
+
+
+(define rember1*-call/cc
+  (lambda (a l)
+    (let ((new-l (call/cc (lambda (say) (rm-let a l say)))))
+      (if (atom? new-l)
+          l
+          new-l))))
+
+(define rm-try
+  (lambda (a l cc)
+    (cond
+     ((null? l) (cc 'no))
+     ((atom? (car l))
+      (if (eq? (car l) a)
+          (cdr l)
+          (cons (car l)
+                (rm-try a (cdr l) cc))))
+     (else
+      (call/cc (lambda (cc1)
+                 (call/cc (lambda (cc2)
+                            (cc1 (cons (rm-try a (car l) cc2)
+                                       (cdr l)))))
+                 (cons (car l)
+                       (rm-try a (cdr l) cc))))))))
+
+(define rember1*-try
+  (lambda (a l)
+    (call/cc (lambda (cc1)
+               (call/cc (lambda (cc2)
+                          (cc1 (rm-try a l cc2))))
+               l))))
