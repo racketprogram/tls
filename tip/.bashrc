@@ -57,9 +57,9 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u:\w\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -116,20 +116,12 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# csi
-alias csi='rlwrap csi'
-
-# rm
-alias rm='rm -i'
-# emacs
-#alias emacs='emacs -q -nw'
 
 # key bind
 xmodmap .Xmodmap
-
-# google
-
-alias google-chrome='google-chrome -–disk-cache-dir="/dev/shm/chrome/"'
-
-
-
+# touchpad off
+synclient touchpadoff=1
+#lxterminal
+alias lxterminal='lxterminal --geometry=80x23'
+#PTT
+alias ptt='ssh bbsu@ptt.cc'
